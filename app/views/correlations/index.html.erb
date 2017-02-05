@@ -1,0 +1,10 @@
+<h1>Dados para Correlação</h1>
+<p><%= link_to 'Para Todos os Experimentos',by_experiment_correlations_path() %></p>
+<p>
+	<h3>Dados por Experimento</h3>
+	<ul>
+		<% 1.upto(4).each do |experiment_number| %>
+			<li><%= link_to "Experimento #{experiment_number}", by_experiment_correlations_path(experiment:experiment_number) %></li>
+		<% end %>
+	</ul>
+</p>

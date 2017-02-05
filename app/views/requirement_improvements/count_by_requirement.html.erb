@@ -1,0 +1,32 @@
+<h1>Requisitos</h1>
+<h2>Contagem por requisito</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Requisito</th>
+      <th>Resultado</th>
+      <th>Quantas Melhoraram</th>
+      <th>Quantas Melhoraram (%)</th>
+      <th>Quantas Se mantiveram</th>
+      <th>Quantas Se mantiveram (%)</th>
+      <th>Quantas Pioraram</th>
+      <th>Quantas Pioraram (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @requirements.each_with_index do |requirement, index| %>
+      <% improvements = requirement.get_count_results @teams_by_experiment %>
+      <tr>
+        <th><%= index+1 %> (<%= requirement.id %>)</th>
+        <td><%= improvements[:positive_absolute] > improvements[:negative_absolute] ? 'Melhorou' : (improvements[:positive_absolute] == improvements[:negative_absolute] ? 'Indiferente' : 'Piorou' ) rescue 'N/A' %></td>
+        <td><%= improvements[:positive_absolute] %></td>
+        <td><%= (improvements[:positive_relative]*100).round(2).to_s.gsub('.',',') %></td>
+        <td><%= improvements[:neutral_absolute] %></td>
+        <td><%= (improvements[:neutral_relative]*100).round(2).to_s.gsub('.',',') %></td>
+        <td><%= improvements[:negative_absolute] %></td>
+        <td><%= (improvements[:negative_relative]*100).round(2).to_s.gsub('.',',') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br />

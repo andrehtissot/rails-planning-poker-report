@@ -1,0 +1,52 @@
+
+<% [1,2].each do |step| %>
+  <h4>Etapa <%= step %></h4>
+  <table>
+    <thead>
+      <tr>
+        <th>Requisito</th>
+        <th>Esforço Real</th>
+        <th>Esforço Estimado Médio</th>
+        <th>Esforço Estimado Mediano</th>
+        <th>Diferença Absoluta Média (MAR)</th>
+        <th>Diferença Absoluta Mediana (MdAR)</th>
+        <th>Erro Quadrático Médio Médio (MMSE)</th>
+        <th>Erro Quadrático Médio Mediano (MdMSE)</th>
+        <th>Erro Relativo Balanceado Médio (MBRE)</th>
+        <th>Erro Relativo Balanceado Mediano (MdBRE)</th>
+        <th>Erro Relativo Balanceado Invertido Médio (MIBRE)</th>
+        <th>Erro Relativo Balanceado Invertido Mediano (MdIBRE)</th>
+        <th>Magnitude do Erro Relativo a Estimativa Média (MMER)</th>
+        <th>Magnitude do Erro Relativo a Estimativa Mediana (MdMER)</th>
+        <th>Magnitude do Erro Relativo Média (MMRE)</th>
+        <th>Magnitude do Erro Relativo Mediana (MdMRE)</th>
+        <th>PRED(25)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @requirements.each_with_index do |requirement, index| %>
+        <% effort_estimates = requirement.get_effort_estimates @teams_by_experiment, step %>
+        <tr>
+          <th><%= index+1 %></th>
+          <td><%= requirement.real_effort.round(2) rescue 'N/A' %></td>
+          <td><%= Requirement.return_mean(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= Requirement.return_median(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.mar(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.mdar(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.mmse(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.mdmse(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.mbre(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.mdbre(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.mibre(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.mdibre(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.mmer(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.mdmer(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.mmre(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.mdmre(effort_estimates).round(2) rescue 'N/A' %></td>
+          <td><%= requirement.pred25_mre(effort_estimates).round(2) rescue 'N/A' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br />
+<% end %>

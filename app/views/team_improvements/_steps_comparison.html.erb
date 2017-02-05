@@ -1,0 +1,53 @@
+<h4>Comparações</h4>
+<table>
+	<thead>
+		<tr>
+			<th>Requisito</th>
+			<th>Etapa 1<br />Estimativa final</th>
+			<th>Etapa 2<br />Estimativa final</th>
+			<th>Esforço real</th>
+			<th>Melhora entre as etapas</th>
+			<th>Melhora relativa ao real</th>
+			<th>Aumento relativo (%) da diferença absoluta (AR)</th>
+			<th>Aumento relativo (%) do erro quadrático médio (MSE)</th>
+			<th>Aumento relativo (%) do erro relativo balanceado (BRE)</th>
+			<th>Aumento relativo (%) do erro relativo balanceado invertido (IBRE)</th>
+			<th>Aumento relativo (%) da magnitude do erro relativo a estimativa (MER)</th>
+			<th>Aumento relativo (%) da magnitude do erro relativo (MRE)</th>
+			<th>Aumento relativo (%) dos minutos gastos</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @requirements.each_with_index do |requirement, index| %>
+			<tr>
+				<th><%= index+1 %></th>
+				<% FromExperiment.set_all_db(Requirement.experiment, 1) %>
+				<% requirement.experiment(Requirement.experiment).step(1) %>
+				<td><%= (s1 = requirement.team_effort_estimate(@team.id) / 1.0) rescue 'N/A' %></td>
+				<% @team.experiment(Requirement.experiment).step(1) %>
+				<% minutes_spend_1 = @team.minutes_spent(requirement_id: requirement.id) %>
+				<% FromExperiment.set_all_db(Requirement.experiment, 2) %>
+				<% requirement.experiment(Requirement.experiment).step(2) %>
+				<td><%= (s2 = requirement.team_effort_estimate(@team.id) / 1.0) rescue 'N/A' %></td>
+				<% @team.experiment(Requirement.experiment).step(2) %>
+				<% minutes_spend_2 = @team.minutes_spent(requirement_id: requirement.id) %>
+				<td><%= requirement.real_effort %></td>
+				<td><%= requirement.real_effort_beetween_steps(s1, s2).round(2) rescue 'N/A' %></td>
+				<td><%= requirement.real_effort_beetween_steps_relative_to_real(s1, s2).round(2) rescue 'N/A' %></td>
+				<td><%= requirement.ar_relative_diff_verbose(s1, s2) rescue 'N/A' %></td>
+				<td><%= requirement.mse_relative_diff_verbose(s1, s2) rescue 'N/A' %></td>
+				<td><%= requirement.bre_relative_diff_verbose(s1, s2) rescue 'N/A' %></td>
+				<td><%= requirement.ibre_relative_diff_verbose(s1, s2) rescue 'N/A' %></td>
+				<td><%= requirement.mer_relative_diff_verbose(s1, s2) rescue 'N/A' %></td>
+				<td><%= requirement.mre_relative_diff_verbose(s1, s2) rescue 'N/A' %></td>
+				<td><%= @team.relative_diff_verbose(minutes_spend_1,minutes_spend_2) rescue 'N/A' %></td>
+			</tr>
+		<% end %>
+	</tbody>
+	<tfoot>
+		<%= render 'steps_comparison_mean' %>
+		<%= render 'steps_comparison_median' %>
+	</tfoot>
+</table>
+<br />
+<br />

@@ -1,0 +1,47 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  username: root
+  # password: pass
+  socket: /var/run/mysqld/mysqld.sock
+
+development:
+  <<: *default
+  database: ppreport
+
+ppexperiment_one_step_one:
+  <<: *default
+  database: ppexperiment_one_step_one
+
+ppexperiment_one_step_two:
+  <<: *default
+  database: ppexperiment_one_step_two
+
+ppexperiment_two_step_one:
+  <<: *default
+  database: ppexperiment_two_step_one
+
+ppexperiment_two_step_two:
+  <<: *default
+  database: ppexperiment_two_step_two
+
+ppexperiment_three_step_one:
+  <<: *default
+  database: ppexperiment_three_step_one
+
+ppexperiment_three_step_two:
+  <<: *default
+  database: ppexperiment_three_step_two
+
+ppexperiment_four_step_one:
+  <<: *default
+  database: ppexperiment_four_step_one
+
+ppexperiment_four_step_two:
+  <<: *default
+  database: ppexperiment_four_step_two
+
+pprecover_from_log_file:
+  <<: *default
+  database: pprecover_from_log_file

@@ -1,0 +1,13 @@
+<tr>
+	<th>Média</th>
+	<td><%= @team.mean_effort_estimate.round(2) rescue 'N/A' %></td>
+	<td><%= @team.mean_real_effort.round(2) rescue 'N/A' %></td>
+	<td><%= (@team.mean_effort_estimate_diff * 100).round(2) rescue 'N/A' %></td>
+	<td><%= @team.mar.round(2) rescue 'N/A' %></td>
+	<td><%= @team.mmse.round(2) rescue 'N/A' %></td>
+	<td><%= @team.mbre.round(2) rescue 'N/A' %></td>
+	<td><%= @team.mibre.round(2) rescue 'N/A' %></td>
+	<td><%= @team.mmer.round(2) rescue 'N/A' %></td>
+	<td><%= @team.mmre.round(2) rescue 'N/A' %></td>
+	<td><%= @team.mean_minutes_spent(requirements: @requirements).round(2) rescue 'N/A' %></td>
+</tr>

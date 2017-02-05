@@ -1,0 +1,13 @@
+<h3>Time: <%= @team.name %></h3>
+<% [1,2].each do |step| %>
+	<h4>Integrantes durante a etapa <%= step %> (<%= @team.step(step).estimation_date_for_step(step) %>)</h4>
+	<ul>
+		<% @team.step(step).participants_names_with_deleted.each do |participant_name| %>
+			<li><%= participant_name %></li>
+		<% end %>
+	</ul>
+<% end %>
+<br />
+<%= render 'steps' %>
+<br />
+<%= render 'steps_comparison' %>

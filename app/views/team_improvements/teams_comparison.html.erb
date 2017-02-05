@@ -1,0 +1,55 @@
+<h3>Comparações</h3>
+<table>
+	<thead>
+		<tr>
+			<th rowspan="2">Experimento</th>
+			<th rowspan="2">Time</th>
+			<th rowspan="2">Participantes na etapa 1</th>
+			<th rowspan="2">Participantes da etapa 1 que saíram do time</th>
+			<th rowspan="2">Participantes que entraram no time na etapa 2</th>
+			<th rowspan="2">Estimativas comparáveis</th>
+			<th colspan="7">Acurácia</th>
+			<th colspan="7">Custo</th>
+		</tr>
+		<tr>
+			<% 2.times do %>
+				<th>Resultado</th>
+				<th>Quantas melhoraram</th>
+				<th>Quantas melhoraram (%)</th>
+				<th>Quantas se mantiveram</th>
+				<th>Quantas se mantiveram (%)</th>
+				<th>Quantas pioraram</th>
+				<th>Quantas pioraram (%)</th>
+			<% end %>
+		</tr>
+	</thead>
+	<tbody>
+		<% team_counter = 0 %>
+		<% @teams_by_experiment.each_with_index do |teams, experiment_number| %>
+			<% teams.each do |team| %>
+				<% team_counter += 1 %>
+				<% improvements = team.experiment(experiment_number+1).count_improvement(add_cost: true) %>
+				<tr>
+					<td><%= experiment_number + 1 %></td>
+					<td><%= team_counter %>: <%= team.name %></td>
+					<td><%= team.participantes_count(1) %></td>
+					<td><%= team.participantes_count_only(1) %></td>
+					<td><%= team.participantes_count_only(2) %></td>
+					<td><%= improvements[:count] %></td>
+					<% [:accuracy, :cost].each do |improvement_key| %>
+						<% improvement_for = improvements[improvement_key] %>
+						<td><%= improvement_for[:positive_absolute] > improvement_for[:negative_absolute] ? 'Melhorou' : (improvement_for[:positive_absolute] == improvement_for[:negative_absolute] ? 'Indiferente' : 'Piorou' )%></td>
+						<td><%= improvement_for[:positive_absolute] %></td>
+						<td><%= (improvement_for[:positive_relative]*100).round(2).to_s.gsub('.',',') %></td>
+						<td><%= improvement_for[:neutral_absolute] %></td>
+						<td><%= (improvement_for[:neutral_relative]*100).round(2).to_s.gsub('.',',') %></td>
+						<td><%= improvement_for[:negative_absolute] %></td>
+						<td><%= (improvement_for[:negative_relative]*100).round(2).to_s.gsub('.',',') %></td>
+					<% end %>
+				</tr>
+			<% end %>
+		<% end %>
+	</tbody>
+</table>
+<br />
+<br />

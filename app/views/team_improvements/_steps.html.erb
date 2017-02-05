@@ -1,0 +1,47 @@
+<% [1,2].each do |step| %>
+	<h4>Etapa <%= step %></h4>
+	<% FromExperiment.set_all_db(Requirement.experiment, step) %>
+	<% @team.experiment(Requirement.experiment).step(step) %>
+	<table>
+		<thead>
+			<tr>
+				<th>Requisito</th>
+				<th>Estimativa final</th>
+				<th>Esforço real</th>
+				<th>Diferença relativa (%)</th>
+				<th>Diferença absoluta (AR)</th>
+				<th>Erro quadrático médio (MSE)</th>
+				<th>Erro relativo balanceado (BRE)</th>
+				<th>Erro relativo balanceado invertido (IBRE)</th>
+				<th>Magnitude do erro relativo a estimativa (MER)</th>
+				<th>Magnitude do erro relativo (MRE)</th>
+				<th>Minutos gastos</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @requirements.each_with_index do |requirement, index| %>
+				<% requirement.experiment(Requirement.experiment).step(step) %>
+				<% estimate = requirement.team_effort_estimate(@team.id) %>
+				<% minutes_spent = @team.minutes_spent(requirement_id: requirement.id).round(2) %>
+				<% next if estimate.nil? && minutes_spent < 0.01 %>
+				<tr>
+					<th><%= index+1 %></th>
+					<td><%= estimate.round(2) rescue 'N/A' %></td>
+					<td><%= requirement.real_effort.round(2) %></td>
+					<td><%= (requirement.team_effort_estimate_diff(@team.id) * 100).round(2) rescue 'N/A' %></td>
+					<td><%= requirement.ar(estimate).round(2) rescue 'N/A' %></td>
+					<td><%= requirement.mse(estimate).round(2) rescue 'N/A' %></td>
+					<td><%= requirement.bre(estimate).round(2) rescue 'N/A' %></td>
+					<td><%= requirement.ibre(estimate).round(2) rescue 'N/A' %></td>
+					<td><%= requirement.mer(estimate).round(2) rescue 'N/A' %></td>
+					<td><%= requirement.mre(estimate).round(2) rescue 'N/A' %></td>
+					<td><%= minutes_spent %></td>
+				</tr>
+			<% end %>
+			<%= render 'steps_mean' %>
+			<%= render 'steps_median' %>
+			<%= render 'steps_pred25' %>
+		</tbody>
+	</table>
+	<br />
+<% end %>

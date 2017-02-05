@@ -1,0 +1,41 @@
+<h4>Tela de Comparação das Primeiras Estimativas Independente do Time</h4>
+<table>
+	<thead>
+		<tr>
+			<th>Experimento</th>
+			<th>Participante</th>
+			<th>Estimativas Comparáveis</th>
+			<th>Resultado</th>
+			<th>Quantas Melhoraram</th>
+			<th>Quantas Melhoraram (%)</th>
+			<th>Quantas Se Mantiveram</th>
+			<th>Quantas Se Mantiveram (%)</th>
+			<th>Quantas Pioraram</th>
+			<th>Quantas Pioraram (%)</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @participants_by_experiment.each do |participants| %>
+			<% participants.each do |participant| %>
+				<% experiment_number = Participant.human_to_number(participant.experiment) %>
+				<% FromExperiment.set_all_db(participant.experiment, 2) %>
+				<% improvements = participant.count_improvement %>
+				<tr>
+					<td><%= experiment_number %></td>
+					<td><%= participant.name %></td>
+					<td><%= improvements[:count] %></td>
+					<td><%= improvements[:positive_absolute] > improvements[:negative_absolute] ? 'Melhorou' : (improvements[:positive_absolute] == improvements[:negative_absolute] ? 'Indiferente' : 'Piorou' )%></td>
+					<td><%= improvements[:positive_absolute] %></td>
+					<td><%= (improvements[:positive_relative]*100).round(2).to_s.gsub('.',',') %></td>
+					<td><%= improvements[:neutral_absolute] %></td>
+					<td><%= (improvements[:neutral_relative]*100).round(2).to_s.gsub('.',',') %></td>
+					<td><%= improvements[:negative_absolute] %></td>
+					<td><%= (improvements[:negative_relative]*100).round(2).to_s.gsub('.',',') %></td>
+				</tr>
+			<% end %>
+		<% end %>
+	</tbody>
+</table>
+<br />
+<br />
+

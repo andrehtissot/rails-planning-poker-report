@@ -1,0 +1,2 @@
+module ParticipantImprovementsHelper
+end

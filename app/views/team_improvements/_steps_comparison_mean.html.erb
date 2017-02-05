@@ -1,0 +1,23 @@
+<tr>
+	<th>Média</th>
+	<% FromExperiment.set_all_db(Requirement.experiment, 1) %>
+	<% @team.experiment(Requirement.experiment).step(1) %>
+	<% minutes_spent_1 = @team.mean_minutes_spent(requirements: @requirements) %>
+	<td><%= @team.mean_effort_estimate.round(2) rescue 'N/A' %></td>
+	<% FromExperiment.set_all_db(Requirement.experiment, 2) %>
+	<% @team.experiment(Requirement.experiment).step(2) %>
+	<% minutes_spent_2 = @team.mean_minutes_spent(requirements: @requirements) %>
+	<td><%= @team.mean_effort_estimate.round(2) rescue 'N/A' %></td>
+	<td><%= @team.mean_real_effort.round(2) rescue 'N/A' %></td>
+	<td><%= @team.mean_real_effort_beetween_steps.round(2) rescue 'N/A' %></td>
+	<td><%= @team.mean_real_effort_beetween_steps_relative_to_real.round(2) rescue 'N/A' %></td>
+	<% [:mar, :mmse, :mbre, :mibre, :mmer, :mmre].each do |method| %>
+		<% FromExperiment.set_all_db(Requirement.experiment, 1) %>
+		<% @team.experiment(Requirement.experiment).step(1) %>
+		<% first_value = @team.send(method) %>
+		<% FromExperiment.set_all_db(Requirement.experiment, 2) %>
+		<% @team.experiment(Requirement.experiment).step(2) %>
+		<td><%= (Requirement.return_relative_diff(first_value, @team.send(method))*100).round(2) rescue 'N/A' %></td>
+	<% end %>
+	<td><%= @team.relative_diff_verbose(minutes_spent_1,minutes_spent_2) rescue 'N/A' %></td>
+</tr>

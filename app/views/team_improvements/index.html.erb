@@ -1,0 +1,13 @@
+<h1>Times</h1>
+<p><%= link_to 'Tela de Comparação',teams_comparison_team_improvements_path %></p>
+<p>
+	<% @teams_by_experiment.each do |teams| %>
+		<% experiment_number = Team.human_to_number(teams.first.experiment) %>
+		<h3>Experimento <%= experiment_number %></h3>
+		<ul>
+			<% teams.each do |team| %>
+				<li><%= link_to team.name, team_improvement_path(team.id, {experiment: experiment_number}) %></li>
+			<% end %>
+		</ul>
+	<% end %>
+</p>

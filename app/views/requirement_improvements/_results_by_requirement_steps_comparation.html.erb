@@ -1,0 +1,55 @@
+
+<h4>Comparações</h4>
+<table>
+  <thead>
+    <tr>
+      <th colspan="2"></th>
+      <th colspan="15">Aumento Relativo (%) de:</th>
+    </tr>
+    <tr>
+      <th>Requisito</th>
+      <th>Esforço Real</th>
+      <th>Esforço Estimado Médio</th>
+      <th>Esforço Estimado Mediano</th>
+      <th>Diferença Absoluta Média (MAR)</th>
+      <th>Diferença Absoluta Mediana (MdAR)</th>
+      <th>Erro Quadrático Médio Médio (MMSE)</th>
+      <th>Erro Quadrático Médio Mediano (MdMSE)</th>
+      <th>Erro Relativo Balanceado Médio (MBRE)</th>
+      <th>Erro Relativo Balanceado Mediano (MdBRE)</th>
+      <th>Erro Relativo Balanceado Invertido Médio (MIBRE)</th>
+      <th>Erro Relativo Balanceado Invertido Mediano (MdIBRE)</th>
+      <th>Magnitude do Erro Relativo a Estimativa Média (MMER)</th>
+      <th>Magnitude do Erro Relativo a Estimativa Mediana (MdMER)</th>
+      <th>Magnitude do Erro Relativo Média (MMRE)</th>
+      <th>Magnitude do Erro Relativo Mediana (MdMRE)</th>
+      <th>PRED(25)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @requirements.each_with_index do |requirement, index| %>
+      <% effort_estimates_step_1 = requirement.get_effort_estimates @teams_by_experiment, 1 %>
+      <% effort_estimates_step_2 = requirement.get_effort_estimates @teams_by_experiment, 2 %>
+      <tr>
+        <th><%= index+1 %></th>
+        <td><%= requirement.real_effort.round(2) rescue 'N/A' %></td>
+        <td><%= relative_diff_verbose(Requirement, 'return_mean', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(Requirement, 'return_median', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'mar', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'mdar', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'mmse', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'mdmse', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'mbre', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'mdbre', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'mibre', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'mdibre', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'mmer', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'mdmer', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'mmre', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'mdmre', effort_estimates_step_1, effort_estimates_step_2) %></td>
+        <td><%= relative_diff_verbose(requirement, 'pred25_mre', effort_estimates_step_1, effort_estimates_step_2) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br />
